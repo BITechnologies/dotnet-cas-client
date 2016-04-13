@@ -74,10 +74,9 @@ namespace DotNetCasClient.Validation.TicketValidator
         /// <summary>
         /// Parse service response method.
         /// </summary>
-        protected virtual ServiceResponse ParseServiceResponse(string response)
+        protected virtual ServiceResponse ParseResponseFromServer(string response)
         {
-            var serviceResponse = ServiceResponse.ParseResponse(response);
-            return serviceResponse;
+            return ServiceResponse.ParseResponse(response);
         }
 
         /// <summary>
@@ -107,7 +106,7 @@ namespace DotNetCasClient.Validation.TicketValidator
             ServiceResponse serviceResponse;
             try
             {
-                serviceResponse = ParseServiceResponse(response);
+                serviceResponse = ParseResponseFromServer(response);
             }
             catch (InvalidOperationException)
             {

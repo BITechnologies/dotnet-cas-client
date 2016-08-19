@@ -32,7 +32,7 @@ namespace DotNetCasClient.Validation.Schema.Cas20
     [XmlType(Namespace = "http://www.yale.edu/tp/cas")]
     public class AuthenticationSuccess
     {
-        internal AuthenticationSuccess() { }
+        public AuthenticationSuccess() { }
 
         [XmlElement("user")]
         public string User

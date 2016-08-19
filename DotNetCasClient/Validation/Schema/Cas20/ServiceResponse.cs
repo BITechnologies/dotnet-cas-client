@@ -34,7 +34,7 @@ namespace DotNetCasClient.Validation.Schema.Cas20
     [XmlRoot("serviceResponse", Namespace = "http://www.yale.edu/tp/cas", IsNullable = false)]
     public class ServiceResponse
     {
-        internal ServiceResponse() { }
+        public ServiceResponse() { }
 
         public static ServiceResponse ParseResponse(string responseXml)
         {

@@ -36,7 +36,7 @@ namespace DotNetCasClient.Validation.TicketValidator
     /// <author>William G. Thompson, Jr. (.Net)</author>
     /// <author>Marvin S. Addison</author>
     /// <author>Scott Holodak (.Net)</author>
-    class Cas20ServiceTicketValidator : AbstractCasProtocolTicketValidator
+    public class Cas20ServiceTicketValidator : AbstractCasProtocolTicketValidator
     {
         #region Properties
         /// <summary>
@@ -72,6 +72,14 @@ namespace DotNetCasClient.Validation.TicketValidator
         }
 
         /// <summary>
+        /// Parse service response method.
+        /// </summary>
+        protected virtual ServiceResponse ParseResponseFromServer(string response)
+        {
+            return ServiceResponse.ParseResponse(response);
+        }
+
+        /// <summary>
         /// Parses the response from the server into a CAS Assertion and includes this in
         /// a CASPrincipal.
         /// <remarks>
@@ -98,7 +106,7 @@ namespace DotNetCasClient.Validation.TicketValidator
             ServiceResponse serviceResponse;
             try
             {
-                serviceResponse = ServiceResponse.ParseResponse(response);
+                serviceResponse = ParseResponseFromServer(response);
             }
             catch (InvalidOperationException)
             {

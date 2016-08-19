@@ -881,6 +881,8 @@ namespace DotNetCasClient
                     casTicket = ServiceTicketManager.GetTicket(serviceTicket);
                     if (casTicket != null)
                     {
+                        securityLogger.Debug("ProcessRequestAuthentication. Found CAS ticket: " + casTicket);
+
                         IAssertion assertion = casTicket.Assertion;
 
                         if (!ServiceTicketManager.VerifyClientTicket(casTicket))
@@ -933,6 +935,7 @@ namespace DotNetCasClient
 
                 if (principal == null)
                 {
+                    securityLogger.Debug("ProcessRequestAuthentication. Thread.CurrentPrincipal is null.");
                     // Remove the cookie from the client
                     ClearAuthCookie();
                 }
@@ -1050,6 +1053,8 @@ namespace DotNetCasClient
             cookie.Domain = FormsAuthentication.CookieDomain;
             cookie.Path = FormsAuthentication.FormsCookiePath;
             current.Response.Cookies.Add(cookie);
+
+            securityLogger.Debug("Clear auth cookie: " + FormsAuthentication.FormsCookieName);
         }
 
         /// <summary>
@@ -1163,17 +1168,20 @@ namespace DotNetCasClient
 
             if (cookie == null)
             {
+                securityLogger.Debug("GetFormsAuthenticationTicket. No auth cookie.");
                 return null;
             }
 
             if (cookie.Expires != DateTime.MinValue && cookie.Expires < DateTime.Now)
             {
+                securityLogger.Debug($"GetFormsAuthenticationTicket. Cookie expired at {cookie.Expires.ToString("g")}.");
                 ClearAuthCookie();
                 return null;
             }
 
-            if (String.IsNullOrEmpty(cookie.Value))
+            if (string.IsNullOrEmpty(cookie.Value))
             {
+                securityLogger.Debug("GetFormsAuthenticationTicket. Cookie value is empty.");
                 ClearAuthCookie();
                 return null;
             }
@@ -1183,26 +1191,30 @@ namespace DotNetCasClient
             {
                 formsAuthTicket = FormsAuthentication.Decrypt(cookie.Value);
             }
-            catch
+            catch (Exception e)
             {
+                securityLogger.Error($"GetFormsAuthenticationTicket. Error during Decrypt cookie value. Error {e.Message}");
                 ClearAuthCookie();
                 return null;
             }
 
             if (formsAuthTicket == null)
             {
+                securityLogger.Debug("GetFormsAuthenticationTicket. FormsAuthTicket is empty");
                 ClearAuthCookie();
                 return null;
             }
 
             if (formsAuthTicket.Expired)
             {
+                securityLogger.Debug("GetFormsAuthenticationTicket. FormsAuthTicket expired");
                 ClearAuthCookie();
                 return null;
             }
 
-            if (String.IsNullOrEmpty(formsAuthTicket.UserData))
+            if (string.IsNullOrEmpty(formsAuthTicket.UserData))
             {
+                securityLogger.Debug("GetFormsAuthenticationTicket. FormsAuthTicket no user data");
                 ClearAuthCookie();
                 return null;
             }

@@ -1174,7 +1174,7 @@ namespace DotNetCasClient
 
             if (cookie.Expires != DateTime.MinValue && cookie.Expires < DateTime.Now)
             {
-                securityLogger.Debug($"GetFormsAuthenticationTicket. Cookie expired at {cookie.Expires.ToString("g")}.");
+                securityLogger.Debug(string.Format("GetFormsAuthenticationTicket. Cookie expired at {0}.", cookie.Expires.ToString("g")));
                 ClearAuthCookie();
                 return null;
             }
@@ -1193,7 +1193,7 @@ namespace DotNetCasClient
             }
             catch (Exception e)
             {
-                securityLogger.Error($"GetFormsAuthenticationTicket. Error during Decrypt cookie value. Error {e.Message}");
+                securityLogger.Error(string.Format("GetFormsAuthenticationTicket. Error during Decrypt cookie value. Error {0}", e.Message));
                 ClearAuthCookie();
                 return null;
             }
